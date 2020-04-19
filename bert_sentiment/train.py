@@ -8,6 +8,7 @@ from .data import SSTDataset
 
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+# device = torch.device('cpu')
 
 def train_one_epoch(model, lossfn, optimizer, dataset, batch_size=32):
     generator = torch.utils.data.DataLoader(
@@ -51,7 +52,7 @@ def evaluate_one_epoch(model, lossfn, optimizer, dataset, batch_size=32):
 def train(
         root=True,
         binary=False,
-        bert='bert-large-uncased',
+        bert='./bert-base-uncased',
         epochs=30,
         batch_size=32,
         save=False,
@@ -60,9 +61,11 @@ def train(
     dev_set = SSTDataset('dev', root=root, binary=binary)
     test_set = SSTDataset('test', root=root, binary=binary)
 
+
     config = BertConfig.from_pretrained(bert)
     if not binary:
         config.num_labels = 5
+    logger.info('import model')
     model = BertForSequenceClassification.from_pretrained(bert, config=config)
 
     model = model.to(device)

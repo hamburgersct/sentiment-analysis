@@ -8,7 +8,9 @@ from pytorch_transformers import BertTokenizer
 
 logger.info('Loading the tokenizer...')
 # use Bert-large
-tokenizer = BertTokenizer.from_pretrained('bert-large-uncased')
+vocab_dir = './vocab'
+vocab_txt_name = '/vocab.txt'
+tokenizer = BertTokenizer.from_pretrained(vocab_dir + vocab_txt_name)
 
 logger.info('Loading SST...')
 sst = pytreebank.load_sst()
